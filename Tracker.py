@@ -40,6 +40,14 @@ def get_Amount():
         except ValueError:
             print("Invalid amount. Please enter a numeric value.")
 
+def get_Description():
+    description = input("Enter short description: ")
+    description = description.strip()
+    if not description:
+        description = "No Description"
+    return description
+
+
 while True:
     print("\nTrack your stuff boss\n" \
     "Options:\n" \
@@ -52,11 +60,25 @@ while True:
     if choice == '1':
         now = datetime.now()
         date = now.strftime("%d-%m-%Y %H:%M:%S")
-        #category = input("Enter Category: ")
+        
         category = get_Category()
         amount = get_Amount()          
-        description = input("Enter short description: ")
-        expenses.append({"date": date, "category": category, "amount": amount, "description": description})
+
+        description = get_Description()
+        print("\nReview your expense:")
+        print(f"Date: {date}\nCategory: {category}\nAmount: ${amount}\nDescription: {description}")
+        while True:
+            confirm = input("\nDo you want to save this expense? (y/n)").lower()
+            if confirm in ['y', 'yes', '']:
+                expenses.append({"date": date, "category": category, "amount": amount, "description": description})
+                print("Expense saved successfully!")
+                break
+
+            elif confirm in ['n', 'no']:
+                print("Expense not saved.")
+                break
+            else:
+                print("Try again, Invalid Input")
 
     elif choice == '2':
         print(f"{'Date':<20} | {'Category':<20} | {'Amount':<10} | {'Description':<30}")
