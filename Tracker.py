@@ -14,7 +14,16 @@ while True:
         now = datetime.now()
         date = now.strftime("%d-%m-%Y %H:%M:%S")
         category = input("Enter Category: ")
-        amount = float(input("Enter Amount: "))
+        while True:
+            try:
+                amount = float(input("Enter Amount: "))
+                if amount <0:
+                    raise ValueError("Amount cannot be negative. Please enter a valid amount.")
+                break
+            except ValueError:
+                print("Invalid amount. Please enter a numeric value.")
+            
+
         description = input("Enter short description: ")
         expenses.append({"date": date, "category": category, "amount": amount, "description": description})
 
