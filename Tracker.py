@@ -53,13 +53,14 @@ def clear_console():
 
 
 while True:
-    clear_console()
+    
     print("\nTrack your stuff boss\n" \
     "Options:\n" \
     "1. Add expense\n" \
     "2. View expenses\n" \
     "3. Total expenses\n" \
-    "4. Exit\n")
+    "4. View expense by category\n" \
+    "5. Exit\n")
     choice = input("Enter Choice: ")
 
     if choice == '1':
@@ -77,6 +78,7 @@ while True:
             if confirm in ['y', 'yes', '']:
                 expenses.append({"date": date, "category": category, "amount": amount, "description": description})
                 print("Expense saved successfully!")
+                clear_console()
                 break
 
             elif confirm in ['n', 'no']:
@@ -86,17 +88,34 @@ while True:
                 print("Try again, Invalid Input")
 
     elif choice == '2':
+        clear_console()
         print(f"{'Date':<20} | {'Category':<20} | {'Amount':<10} | {'Description':<30}")
         print("-" * 80)
         for expense in expenses:
             print(f"{expense['date']:<20} | {expense['category']:<20} | ${expense['amount']:<10.2f} | {expense['description']:<30}")
             #print(expense)
+        input("\nPress Enter to continue...")
 
     elif choice == '3':
+        clear_console()
         total = sum(expense['amount'] for expense in expenses)
         print(f"Total Expenses: ${total}")
-            
+        input("\nPress Enter to continue...")
+
     elif choice == '4':
+        clear_console()
+        category = get_Category()
+        filtered_expenses = [expense for expense in expenses if expense['category'] == category]
+        if filtered_expenses:
+            print(f"\nExpenses in category '{category}':")
+            print(f"{'Date':<20} | {'Category':<20} | {'Amount':<10} | {'Description':<30}")
+            print("-" * 80)
+            for expense in filtered_expenses:
+                print(f"{expense['date']:<20} | {expense['category']:<20} | ${expense['amount']:<10.2f} | {expense['description']:<30}")
+                input("\nPress Enter to continue...")
+        else:
+            print(f"No expenses found in category '{category}'.")        
+    elif choice == '5':
         print("See ya later samurai")
         break
 
