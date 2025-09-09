@@ -1,4 +1,5 @@
-from datetime import datetime   
+from datetime import datetime
+import os   
 expenses = [{'date': '08-09-2025 23:57:42', 'category': 'Groceries', 'amount': 87.99, 'description': 'Grocery shop at coles'}, 
             {'date': '08-09-2025 23:58:33', 'category': 'Travel', 'amount': 12.65, 'description': 'Uber to work'}]
 
@@ -47,8 +48,12 @@ def get_Description():
         description = "No Description"
     return description
 
+def clear_console():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 
 while True:
+    clear_console()
     print("\nTrack your stuff boss\n" \
     "Options:\n" \
     "1. Add expense\n" \
