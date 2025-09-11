@@ -2,8 +2,8 @@ from datetime import datetime
 import os
 import json
 
-expenses = [{'date': '08-09-2025 23:57:42', 'category': 'Groceries', 'amount': 87.99, 'description': 'Grocery shop at coles'}, 
-            {'date': '08-09-2025 23:58:33', 'category': 'Travel', 'amount': 12.65, 'description': 'Uber to work'}]
+#expenses = [{'date': '08-09-2025 23:57:42', 'category': 'Groceries', 'amount': 87.99, 'description': 'Grocery shop at coles'}, 
+            #{'date': '08-09-2025 23:58:33', 'category': 'Travel', 'amount': 12.65, 'description': 'Uber to work'}]
 
 def get_Category():
     categories = [
@@ -54,23 +54,34 @@ def clear_console():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def save_expenses():
-    with open('expenses.json', 'w') as file:
-        json.dump(expenses, file)
+    try:
+        with open('expenses.json', 'w') as file:
+            json.dump(expenses, file)
+    except Exception as e:
+        print(f"Error saving file{e}")
 
+def load_expenses():
+    try:
+        with open('expenses.json', 'r') as file:
+            return json.load(file)
+    except Exception as e:
+        print(f"Error loading existing expenses: {e}")
+        return []
 
+# Daily Expense Tracker, refreshes each day to 0 expenses function
 while True:
-    
+    expenses = load_expenses()
+
     print("\nTrack your stuff boss\n" \
     "Options:\n" \
     "1. Add expense\n" \
     "2. View expenses\n" \
     "3. Total expenses\n" \
     "4. View expense by category\n" \
-    "5. Exit\n" \
-    "6. Save expenses\n")
+    "5. Exit\n")
     choice = input("Enter Choice: ")
 
-    if choice == '1':
+    if choice == '1': #Add expense
         now = datetime.now()
         date = now.strftime("%d-%m-%Y %H:%M:%S")
         
@@ -85,6 +96,7 @@ while True:
             if confirm in ['y', 'yes', '']:
                 expenses.append({"date": date, "category": category, "amount": amount, "description": description})
                 print("Expense saved successfully!")
+                save_expenses()
                 clear_console()
                 break
 
@@ -94,7 +106,7 @@ while True:
             else:
                 print("Try again, Invalid Input")
 
-    elif choice == '2':
+    elif choice == '2': #View expenses
         clear_console()
         print(f"{'Date':<20} | {'Category':<20} | {'Amount':<10} | {'Description':<30}")
         print("-" * 80)
@@ -103,13 +115,13 @@ while True:
             #print(expense)
         input("\nPress Enter to continue...")
 
-    elif choice == '3':
+    elif choice == '3': #Total expenses
         clear_console()
         total = sum(expense['amount'] for expense in expenses)
         print(f"Total Expenses: ${total}")
         input("\nPress Enter to continue...")
 
-    elif choice == '4':
+    elif choice == '4': #View expense by category
         clear_console()
         category = get_Category()
         filtered_expenses = [expense for expense in expenses if expense['category'] == category]
@@ -122,13 +134,11 @@ while True:
                 input("\nPress Enter to continue...")
         else:
             print(f"No expenses found in category '{category}'.")        
-    elif choice == '5':
+    
+    elif choice == '5': #Exit
+        save_expenses()
         print("See ya later samurai")
         break
-
-    elif choice == '6':
-        save_expenses()
-        print("Expenses saved successfully!")
 
     else:
         print("Invalid Input")
