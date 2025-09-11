@@ -1,5 +1,7 @@
 from datetime import datetime
-import os   
+import os
+import json
+
 expenses = [{'date': '08-09-2025 23:57:42', 'category': 'Groceries', 'amount': 87.99, 'description': 'Grocery shop at coles'}, 
             {'date': '08-09-2025 23:58:33', 'category': 'Travel', 'amount': 12.65, 'description': 'Uber to work'}]
 
@@ -51,6 +53,10 @@ def get_Description():
 def clear_console():
     os.system('cls' if os.name == 'nt' else 'clear')
 
+def save_expenses():
+    with open('expenses.json', 'w') as file:
+        json.dump(expenses, file)
+
 
 while True:
     
@@ -60,7 +66,8 @@ while True:
     "2. View expenses\n" \
     "3. Total expenses\n" \
     "4. View expense by category\n" \
-    "5. Exit\n")
+    "5. Exit\n" \
+    "6. Save expenses\n")
     choice = input("Enter Choice: ")
 
     if choice == '1':
@@ -118,6 +125,10 @@ while True:
     elif choice == '5':
         print("See ya later samurai")
         break
+
+    elif choice == '6':
+        save_expenses()
+        print("Expenses saved successfully!")
 
     else:
         print("Invalid Input")
