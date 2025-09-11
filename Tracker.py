@@ -68,6 +68,37 @@ def load_expenses():
         print(f"Error loading existing expenses: {e}")
         return []
 
+def filter_expenses_by_date():
+    while True: 
+        date_str = input("Enter date (DD-MM-YYYY) or Leave empty for today's expenses: ")
+        date_str = date_str.strip()
+        try:
+            if not date_str:
+                filtered_expenses = todays_expenses()
+                print("\nToday's Expenses:")
+            else:
+                filter_date = datetime.strptime(date_str, "%d-%m-%Y").date()
+                filtered_expenses = [expense for expense in expenses if datetime.strptime(expense['date'], "%d-%m-%Y %H:%M:%S").date() == filter_date]
+                print(f"\nExpenses on '{date_str}':")
+            if filtered_expenses:
+                
+                print(f"{'Date':<20} | {'Category':<20} | {'Amount':<10} | {'Description':<30}")
+                print("-" * 80)
+                for expense in filtered_expenses:
+                    print(f"{expense['date']:<20} | {expense['category']:<20} | ${expense['amount']:<10.2f} | {expense['description']:<30}")
+                input("\nPress Enter to continue...")
+                break
+            else:
+                print(f"No expenses found on '{date_str}'.")
+                break
+        except ValueError:
+            print("Invalid date format. Please enter the date in DD-MM-YYYY format.")
+
+def todays_expenses():
+    today = datetime.now().date()
+    todays_expenses = [expense for expense in expenses if datetime.strptime(expense['date'], "%d-%m-%Y %H:%M:%S").date() == today]
+    return todays_expenses
+
 # Daily Expense Tracker, refreshes each day to 0 expenses function
 while True:
     expenses = load_expenses()
@@ -78,7 +109,8 @@ while True:
     "2. View expenses\n" \
     "3. Total expenses\n" \
     "4. View expense by category\n" \
-    "5. Exit\n")
+    "5. View expense by date\n" \
+    "6. Exit\n")
     choice = input("Enter Choice: ")
 
     if choice == '1': #Add expense
@@ -135,7 +167,12 @@ while True:
         else:
             print(f"No expenses found in category '{category}'.")        
     
-    elif choice == '5': #Exit
+    elif choice == '5': #View expense by date
+        clear_console()
+        filter_expenses_by_date()
+
+    
+    elif choice == '6': #Exit
         save_expenses()
         print("See ya later samurai")
         break
