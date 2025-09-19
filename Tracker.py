@@ -119,6 +119,22 @@ def category_expenses():
     print(f"{'Total':<20} | ${total_expenses:<15.2f}")
     input("\nPress Enter to continue...")
 
+def delete_last_expense():
+    if expenses:
+        last_expense = expenses[-1]
+        confirm = input(f"Last expense: \n"
+                         f"Date: {last_expense['date']}\n"
+                         f"Category: {last_expense['category']}\n"
+                         f"Amount: ${last_expense['amount']}\n"
+                         f"Description: {last_expense['description']}\n"
+                         f"Press n to cancel, any other key to confirm deletion: ")
+        if confirm.lower() != 'n':
+            expenses.pop()
+            print(f"Deleted last expense: {last_expense}")
+            save_expenses()
+    else:
+        print("No expenses to delete.")
+
 
 # Daily Expense Tracker, refreshes each day to 0 expenses function
 while True:
@@ -131,7 +147,8 @@ while True:
     "3. Total expenses\n" \
     "4. View expense by category\n" \
     "5. View expense by date\n" \
-    "6. Exit\n")
+    "6. Delete last expense\n" \
+    "7. Exit\n")
     choice = input("Enter Choice: ")
 
     if choice == '1': #Add expense
@@ -190,8 +207,11 @@ while True:
         clear_console()
         filter_expenses_by_date()
 
+    elif choice == '6': #Delete last expense
+        clear_console()
+        delete_last_expense()
     
-    elif choice == '6': #Exit
+    elif choice == '7': #Exit
         save_expenses()
         print("See ya later samurai")
         break
